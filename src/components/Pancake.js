@@ -1,85 +1,94 @@
 import React from "react";
 
 class Pancake extends React.Component {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    this.state = {
-      timeCooked: 0,
-      flippedAt: null
-    };
-  }
+		this.state = {
+		timeCooked: 0,
+		flippedAt: null
+		};
+	}
 
-  // TODO: create a componentDidMount() which will start the interval to count how long the pancake has been cooking
+	// TODO: create a componentDidMount() which will start the interval to count how long the pancake has been cooking
 
-  // TODO: create a componentWillUnmount() which will clear the interval
+	componentDidMount() {
 
-  updateCounter = () => {
-    this.setState({
-      timeCooked: this.state.timeCooked + 1
-    });
-  };
+		this.startInterval()
 
-  startInterval = () => {
-    this.interval = setInterval(this.updateCounter, 1000);
-  };
+	}
+	// TODO: create a componentWillUnmount() which will clear the interval
+	componentWillUnmount() {
 
-  cleanUpInterval = () => {
-    clearInterval(this.interval);
-  };
+		this.cleanUpInterval()
 
-  flip = () => {
-    this.setState({
-      flippedAt: this.state.timeCooked
-    });
-  };
+	}
+	updateCounter = () => {
+		this.setState({
+		timeCooked: this.state.timeCooked + 1
+		});
+	};
 
-  getPancakeStatus = () => {
-    const { timeCooked, flippedAt } = this.state;
+	startInterval = () => {
+		this.interval = setInterval(this.updateCounter, 1000);
+	};
 
-    // first side
-    if (flippedAt === null && typeof flippedAt !== "number") {
-      if (timeCooked < 2) return "raw";
-      if (timeCooked === 2) return "cooked";
-      return "burnt";
-    }
+	cleanUpInterval = () => {
+		clearInterval(this.interval);
+	};
 
-    //second side
-    if (flippedAt > 2 || timeCooked > 4) return "burnt";
-    if (timeCooked === 4 && flippedAt === 2) return "cooked";
-    return "raw";
-  };
+	flip = () => {
+		this.setState({
+		flippedAt: this.state.timeCooked
+		});
+	};
 
-  takeItOff = () => {
-    const { id } = this.props;
-    let status = this.getPancakeStatus();
-    this.props.takeItOff(id, status);
-  };
+	getPancakeStatus = () => {
+		const { timeCooked, flippedAt } = this.state;
 
-  render() {
-    const { timeCooked, flippedAt } = this.state;
-    const firstSide = Boolean(this.state.flippedAt === null && typeof flippedAt !== "number");
-    const status = this.getPancakeStatus();
+		// first side
+		if (flippedAt === null && typeof flippedAt !== "number") {
+		if (timeCooked < 2) return "raw";
+		if (timeCooked === 2) return "cooked";
+		return "burnt";
+		}
 
-    return (
-      <div className={`Pancake --${status}`}>
-        <div className="Pancake__content">
-          <p>I am a pancake.</p>
-          <p>
-            Time cooked on {`${firstSide ? "first" : "second"}`} side:{" "}
-            {`${firstSide ? timeCooked : timeCooked - flippedAt}`}
-          </p>
-          <div>
-            {firstSide ? (
-              <button onClick={this.flip}>Flip me!</button>
-            ) : (
-              <button onClick={this.takeItOff}>Take me off!</button>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
+		//second side
+		if (flippedAt > 2 || timeCooked > 4) return "burnt";
+		if (timeCooked === 4 && flippedAt === 2) return "cooked";
+		return "raw";
+	};
+
+	takeItOff = () => {
+		const { id } = this.props;
+		let status = this.getPancakeStatus();
+		this.props.takeItOff(id, status);
+	};
+
+	render() {
+		const { timeCooked, flippedAt } = this.state;
+		const firstSide = Boolean(this.state.flippedAt === null && typeof flippedAt !== "number");
+		const status = this.getPancakeStatus();
+
+		return (
+		<div className={`Pancake --${status}`}>
+			<div className="Pancake__content">
+			<p>I am a pancake.</p>
+			<p>
+				Time cooked on {`${firstSide ? "first" : "second"}`} side:{" "}
+				{`${firstSide ? timeCooked : timeCooked - flippedAt}`}
+			</p>
+			<div>
+				{firstSide ? (
+				<button onClick={this.flip}>Flip me!</button>
+				) : (
+				<button onClick={this.takeItOff}>Take me off!</button>
+				)}
+			</div>
+			</div>
+		</div>
+		);
+	}
 }
 
 export default Pancake;
