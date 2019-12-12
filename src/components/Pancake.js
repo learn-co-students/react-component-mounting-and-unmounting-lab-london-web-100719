@@ -11,8 +11,23 @@ class Pancake extends React.Component {
   }
 
   // TODO: create a componentDidMount() which will start the interval to count how long the pancake has been cooking
+componentDidMount =() => {
+  this.startInterval()
+}
 
-  // TODO: create a componentWillUnmount() which will clear the interval
+componentDidUpdate =()=>{
+  console.log(this.state.timeCooked)
+}
+ // TODO: create a componentWillUnmount() which will clear the interval
+// componentWillUnmount = () =>{
+//  this.cleanUpInterval()
+// }
+//why does this not woprk but above does??lear
+
+componentWillUnmount() {
+  this.cleanUpInterval()
+}
+
 
   updateCounter = () => {
     this.setState({
